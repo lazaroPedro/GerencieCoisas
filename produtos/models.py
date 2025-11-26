@@ -18,6 +18,12 @@ class Produto(models.Model):
         verbose_name="Subcategoria",
         related_name="produtos"
     )
+    supplier = models.ForeignKey(
+        'fornecedores.Fornecedor',
+        on_delete=models.PROTECT,
+        verbose_name="Fornecedor",
+        related_name="produtos"
+    )
     def __str__(self):
         return self.name
 
