@@ -1,0 +1,72 @@
+{% load static %}
+<div class="d-flex fixed-top flex-column flex-shrink-0 p-3 text-white bg-dark" style="width: 250px; min-height: 100vh;">
+    <!-- Logo / Nome do Sistema -->
+    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+        <i class="fas fa-boxes fa-2x me-2"></i>
+        <span class="fs-4 fw-bold">GerencieCoisas</span>
+    </a>
+    <hr>
+
+    <!-- Menu de Navegação -->
+    <ul class="nav nav-pills flex-column mb-auto">
+        <li class="nav-item">
+            <a href="#" class="nav-link text-white" aria-current="page">
+                <i class="fas fa-tachometer-alt me-2" style="width: 20px;"></i>
+                Dashboard
+            </a>
+        </li>
+
+        <!-- Seção de Cadastros -->
+        <li class="mt-3 text-uppercase text-muted small fw-bold px-3">
+            Cadastros
+        </li>
+        <li>
+            <a href="{% url 'produtos:index' %}" class="nav-link text-white {% if request.resolver_match.url_name == 'index' %}active{% endif %}">
+                <i class="fas fa-box-open me-2" style="width: 20px;"></i>
+                Produtos
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'categorias:index' %}" class="nav-link text-white {% if 'category' in request.resolver_match.url_name %}active{% endif %}">
+                <i class="fas fa-tags me-2" style="width: 20px;"></i>
+                Categorias
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'categorias:index' %}" class="nav-link text-white {% if 'fornecedor' in request.resolver_match.url_name %}active{% endif %}">
+                <i class="fas fa-truck me-2" style="width: 20px;"></i>
+                Fornecedores
+            </a>
+        </li>
+
+        <!-- Seção de Estoque (Futuro) -->
+        <li class="mt-3 text-uppercase text-muted small fw-bold px-3">
+            Gestão
+        </li>
+        <li>
+            <a href="#" class="nav-link text-white disabled">
+                <i class="fas fa-exchange-alt me-2" style="width: 20px;"></i>
+                Movimentações
+                <span class="badge bg-secondary ms-2">Em breve</span>
+            </a>
+        </li>
+    </ul>
+
+    <hr>
+
+    <!-- Rodapé da Sidebar / Usuário -->
+    <div class="dropdown">
+        <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+            <div class="bg-primary rounded-circle d-flex justify-content-center align-items-center me-2" style="width: 32px; height: 32px;">
+                <i class="fas fa-user"></i>
+            </div>
+            <strong>Admin</strong>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+            <li><a class="dropdown-item" href="#">Configurações</a></li>
+            <li><a class="dropdown-item" href="#">Perfil</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#">Sair</a></li>
+        </ul>
+    </div>
+</div>
