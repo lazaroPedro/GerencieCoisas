@@ -20,6 +20,7 @@
                             <th>Estoque</th>
                             <th>Status</th>
                             <th>Categoria</th>
+                            <th>Fornecedores</th>
                             <th class="text-end"></th>
                         </tr>
                     </thead>
@@ -43,6 +44,14 @@
                             <td>
                                 {{ produto.category }}
                             </td>
+                            <td>
+{% for fornecedor in produto.supplier.all %}
+    {{ fornecedor.name }}{% if not forloop.last %}, {% endif %}
+{% empty %}
+    Sem fornecedor
+{% endfor %}
+
+                      </td>
                             <td class="text-end">
                                 <a href="{% url 'produtos:edit' pk=produto.id %}" class="btn btn-sm btn-outline-secondary me-1">
                                     Editar

@@ -18,9 +18,8 @@ class Produto(models.Model):
         verbose_name="Subcategoria",
         related_name="produtos"
     )
-    supplier = models.ForeignKey(
+    supplier = models.ManyToManyField(
         'fornecedores.Fornecedor',
-        on_delete=models.PROTECT,
         verbose_name="Fornecedor",
         related_name="produtos"
     )
