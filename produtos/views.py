@@ -15,7 +15,7 @@ def create(request):
         form = ProdutoForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('index')
+            return redirect('produtos:index')
     else:
 
         form = ProdutoForm()
@@ -28,7 +28,7 @@ def edit(request, pk):
         form = ProdutoEditForm(request.POST, instance=produto)
         if form.is_valid():
             form.save()
-            return redirect('index')
+            return redirect('produtos:index')
     else:
         form = ProdutoEditForm(instance=produto)
     return render(request, 'produtos/edit.html', {'form': form, 'produto': produto})
@@ -37,7 +37,7 @@ def delete(request, pk):
     produto = Produto.objects.get(id=pk)
     if request.method == 'POST':
         produto.delete()
-        return redirect('index')
+        return redirect('produtos:index')
     else:
         form = ProdutoForm(instance=produto)
     return render(request, 'produtos/delete.html', {'form': form, 'produto': produto})

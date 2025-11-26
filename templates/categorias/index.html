@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Gerenciamento de Categorias</h2>
+        <a href="{% url 'categorias:create' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Nova Categoria
+        </a>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Nome / Hierarquia</th>
+                            <th>Tipo</th>
+                            <th>Produtos Vinculados</th>
+                            <th class="text-end">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for category in categorias %}
+                        <tr>
+                            <td>
+                                {% if category.parent %}
+                                    <!-- Indentação visual para subcategorias -->
+                                    <span class="text-muted ms-3">↳</span>
+                                    <strong>{{ category.name }}</strong>
+                                    <br>
+                                    <small class="text-muted ms-4">Pertence a: {{ category.parent.name }}</small>
+                                {% else %}
+                                    <strong class="text-primary">{{ category.name }}</strong>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if category.parent %}
+                                    <span class="badge bg-info text-dark">Subcategoria</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">Categoria Principal</span>
+                                {% endif %}
+                            </td>
+                            <td>
+
+                            </td>
+                            <td class="text-end">
+                                <a href="{% url 'categorias:edit' pk=category.id %}" class="btn btn-sm btn-outline-secondary me-1">
+                                    Editar
+                                </a>
+                                <a href="{% url 'categorias:delete' pk=category.id %}" class="btn btn-sm btn-outline-danger">
+                                    Excluir
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center py-4">
+                                <p class="text-muted mb-0">Nenhuma categoria cadastrada.</p>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

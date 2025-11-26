@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card border-danger shadow">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0">Confirmar Exclusão</h5>
+                </div>
+                <div class="card-body text-center p-5">
+                    <h3 class="text-danger mb-4">Atenção!</h3>
+                    <p class="lead">
+                        Você está prestes a excluir a categoria: <br>
+                        <strong>{{ categorias.name }}</strong>
+                    </p>
+
+                    {% if categorias.subcategories.count > 0 %}
+                        <div class="alert alert-warning text-start">
+                            <strong><i class="fas fa-exclamation-triangle"></i> Cuidado:</strong>
+                            Esta é uma categoria PRINCIPAL. Ao excluí-la, você também excluirá
+                            <strong>{{ categorias.subcategories.count }} subcategorias</strong> vinculadas a ela.
+                        </div>
+                    {% endif %}
+
+                    {% if categorias.produtos.count > 0 %}
+                        <div class="alert alert-warning text-start">
+                             <strong><i class="fas fa-box-open"></i> Impacto nos Produtos:</strong>
+                             Existem <strong>{{ categorias.produtos.count }} produtos</strong> nesta categoria.
+                             Eles ficarão sem categoria (null) após esta ação.
+                        </div>
+                    {% endif %}
+
+                    <p class="text-muted small">Essa ação não pode ser desfeita.</p>
+
+                    <form method="POST" class="mt-4">
+                        {% csrf_token %}
+                        <div class="d-grid gap-2 d-md-flex justify-content-center">
+                            <a href="{% url 'categorias:index' %}" class="btn btn-secondary px-4">Cancelar</a>
+                            <button type="submit" class="btn btn-danger px-4">Excluir</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -19,7 +19,8 @@
                             <th>Preço</th>
                             <th>Estoque</th>
                             <th>Status</th>
-                            <th class="text-end">Ações</th>
+                            <th>Categoria</th>
+                            <th class="text-end"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -38,6 +39,9 @@
                                 {% else %}
                                     <span class="badge bg-danger">Inativo</span>
                                 {% endif %}
+                            </td>
+                            <td>
+                                {{ produto.category }}
                             </td>
                             <td class="text-end">
                                 <a href="{% url 'produtos:edit' pk=produto.id %}" class="btn btn-sm btn-outline-secondary me-1">
