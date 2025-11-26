@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 
 # Create your models here.
@@ -11,5 +12,21 @@ class Produto(models.Model):
     updated = models.DateTimeField(auto_now=True)
     quantity = models.PositiveIntegerField(default=0)
 
+    category = models.ForeignKey(
+        'categorias.Categoria',
+        on_delete=models.PROTECT,
+        verbose_name="Subcategoria",
+        related_name="produtos"
+    )
     def __str__(self):
         return self.name
+
+    def clean(self):
+        if self.category and not self.category.is_subcategory:
+            raise ValidationError({
+                'category': 'Produtos só podem ser associados a subcategorias.'
+            })
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
