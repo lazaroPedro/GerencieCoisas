@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Visão Geral</h2>
+        <span class="text-muted">Bem-vindo ao EstoquePro</span>
+    </div>
+
+    <!-- Cards de Indicadores -->
+    <div class="row g-3 mb-4">
+        <!-- Card Produtos -->
+        <div class="col-md-3">
+            <div class="card shadow-sm border-start border-4 border-primary h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="text-muted mb-0 small text-uppercase fw-bold">Produtos</p>
+                            <h3 class="mb-0 text-primary">{{ total_produtos }}</h3>
+                        </div>
+                        <div class="bg-primary bg-opacity-10 p-3 rounded-circle">
+                            <i class="fas fa-box fa-lg text-primary"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card Fornecedores -->
+        <div class="col-md-3">
+            <div class="card shadow-sm border-start border-4 border-success h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="text-muted mb-0 small text-uppercase fw-bold">Fornecedores</p>
+                            <h3 class="mb-0 text-success">{{ total_fornecedores }}</h3>
+                        </div>
+                        <div class="bg-success bg-opacity-10 p-3 rounded-circle">
+                            <i class="fas fa-truck fa-lg text-success"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card Valor em Stock -->
+        <div class="col-md-3">
+            <div class="card shadow-sm border-start border-4 border-info h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="text-muted mb-0 small text-uppercase fw-bold">Valor em Stock</p>
+                            <h4 class="mb-0 text-info">R$ {{ valor_estoque|floatformat:2 }}</h4>
+                        </div>
+                        <div class="bg-info bg-opacity-10 p-3 rounded-circle">
+                            <i class="fas fa-dollar-sign fa-lg text-info"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card Alerta Stock Baixo -->
+        <div class="col-md-3">
+            <div class="card shadow-sm border-start border-4 border-warning h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="text-muted mb-0 small text-uppercase fw-bold">Stock Baixo</p>
+                            <h3 class="mb-0 text-warning">{{ baixo_estoque_count }}</h3>
+                        </div>
+                        <div class="bg-warning bg-opacity-10 p-3 rounded-circle">
+                            <i class="fas fa-exclamation-triangle fa-lg text-warning"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabela de Produtos Recentes -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white py-3">
+                    <h5 class="mb-0 card-title fw-bold">Últimos Produtos Cadastrados</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="ps-4">Produto</th>
+                                    <th>Categoria</th>
+                                    <th>Preço</th>
+                                    <th>Stock</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for produto in ultimos_produtos %}
+                                <tr>
+                                    <td class="ps-4 fw-bold">{{ produto.name }}</td>
+                                    <td>
+                                        {% if produto.category %}
+                                            {{ produto.category.name }}
+                                        {% else %}
+                                            <span class="text-muted">-</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>R$ {{ produto.price }}</td>
+                                    <td>
+                                        {% if produto.quantity < 5 %}
+                                            <span class="text-danger fw-bold"><i class="fas fa-arrow-down small"></i> {{ produto.quantity }}</span>
+                                        {% else %}
+                                            <span class="text-success">{{ produto.quantity }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if produto.active %}
+                                            <span class="badge bg-success bg-opacity-75">Ativo</span>
+                                        {% else %}
+                                            <span class="badge bg-danger bg-opacity-75">Inativo</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="5" class="text-center py-4 text-muted">
+                                        Nenhum produto registado recentemente.
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card-footer bg-white text-center py-3">
+                    <a href="{% url 'index' %}" class="btn btn-outline-primary btn-sm">Ver Todos os Produtos</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
