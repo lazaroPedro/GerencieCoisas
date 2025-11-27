@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <!-- Coluna Esquerda: Informações -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <i class="fas fa-building fa-2x text-secondary"></i>
+                        </div>
+                        <h4 class="card-title">{{ fornecedor.name }}</h4>
+                        {% if fornecedor.corporate_name %}
+                            <p class="text-muted small mb-0">{{ fornecedor.corporate_name }}</p>
+                        {% endif %}
+                    </div>
+
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item px-0">
+                            <span class="text-muted small fw-bold d-block text-uppercase">CNPJ</span>
+                            {{ fornecedor.cnpj }}
+                        </li>
+                        {% if fornecedor.email %}
+                        <li class="list-group-item px-0">
+                            <span class="text-muted small fw-bold d-block text-uppercase">Email</span>
+                            <a href="mailto:{{ fornecedor.email }}" class="text-decoration-none">{{ fornecedor.email }}</a>
+                        </li>
+                        {% endif %}
+                        {% if fornecedor.phone %}
+                        <li class="list-group-item px-0">
+                            <span class="text-muted small fw-bold d-block text-uppercase">Telefone</span>
+                            {{ fornecedor.phone }}
+                        </li>
+                        {% endif %}
+                        <li class="list-group-item px-0">
+                            <span class="text-muted small fw-bold d-block text-uppercase">Cadastrado em</span>
+                            {{ fornecedor.created|date:"d/m/Y" }}
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-footer bg-white text-center py-3">
+                    <a href="{% url 'fornecedores:edit' pk=fornecedor.id %}" class="btn btn-outline-primary w-100">
+                        <i class="fas fa-edit"></i> Editar Dados
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Coluna Direita: Produtos -->
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Produtos Fornecidos</h5>
+                    <span class="badge bg-secondary">{{ fornecedor.produtos.count }}</span>
+                </div>
+                <div class="card-body p-0">
+                    {% if fornecedor.produtos.exists %}
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th class="ps-4">Produto</th>
+                                        <th>Categoria</th>
+                                        <th>Preço</th>
+                                        <th class="text-end pe-4">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for produto in fornecedor.produtos.all %}
+                                    <tr>
+                                        <td class="ps-4 fw-bold">
+                                            <a href="{% url 'produtos:detail' pk=produto.id %}" class="text-dark text-decoration-none">
+                                                {{ produto.name }}
+                                            </a>
+                                        </td>
+                                        <td>
+                                            {% if produto.category %}
+                                                {{ produto.category.name }}
+                                            {% else %}
+                                                <span class="text-muted">-</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>R$ {{ produto.price }}</td>
+                                        <td class="text-end pe-4">
+                                            <a href="{% url 'produtos:detail' pk=produto.id %}" class="btn btn-sm btn-outline-secondary" title="Ver Detalhes">
+                                                Ver
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="p-5 text-center text-muted">
+                            <i class="fas fa-box-open fa-3x mb-3 text-light-gray opacity-25"></i>
+                            <p>Este fornecedor ainda não fornece nenhum produto.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="mt-3 text-end">
+                <a href="{% url 'fornecedores:index' %}" class="btn btn-secondary">Voltar para Lista</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

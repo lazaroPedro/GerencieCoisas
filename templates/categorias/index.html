@@ -24,6 +24,8 @@
                     <tbody>
                         {% for category in categorias %}
                         <tr>
+
+
                             <td>
                                 {% if category.parent %}
                                     <!-- Indentação visual para subcategorias -->
@@ -46,6 +48,7 @@
 
                             </td>
                             <td class="text-end">
+                                <a href="{% url 'categorias:detail' pk=category.id %}">Ver</a>
                                 <a href="{% url 'categorias:edit' pk=category.id %}" class="btn btn-sm btn-outline-secondary me-1">
                                     Editar
                                 </a>

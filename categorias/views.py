@@ -42,3 +42,6 @@ def delete(request, pk):
         form = CategoriaForm(instance=categorias)
     return render(request, 'categorias/delete.html', {'form': form, "categorias": categorias})
 
+def detail(request, pk):
+    categorias = Categoria.objects.get(id=pk)
+    return render(request, 'categorias/detail.html', {'categorias': categorias})

@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white py-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">
+                    <i class="fas fa-tags me-2"></i> {{ categorias.name }}
+                </h4>
+                {% if categorias.parent %}
+                    <span class="badge bg-light text-primary">Subcategoria de {{ categorias.parent.name }}</span>
+                {% else %}
+                    <span class="badge bg-light text-primary">Categoria Principal</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card-body">
+            <!-- Se for Categoria Principal, mostra subcategorias -->
+            {% if not categorias.parent %}
+                <h5 class="mb-3 border-bottom pb-2">Subcategorias Vinculadas</h5>
+                {% if categorias.subcategories.exists %}
+                    <div class="row row-cols-1 row-cols-md-3 g-3 mb-4">
+                        {% for sub in categorias.subcategories.all %}
+                        <div class="col">
+                            <a href="{% url 'categorias:detail' pk=sub.id %}" class="card text-decoration-none h-100 border-start border-4 border-info">
+                                <div class="card-body d-flex justify-content-between align-items-center">
+                                    <span class="text-dark fw-bold">{{ sub.name }}</span>
+                                    <span class="badge bg-secondary rounded-pill">{{ sub.produtos.count }}</span>
+                                </div>
+                            </a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-muted mb-4">Nenhuma subcategoria cadastrada.</p>
+                {% endif %}
+            {% endif %}
+
+            <!-- Lista de Produtos -->
+            <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
+                <h5 class="mb-0">Produtos nesta Categoria</h5>
+                <span class="badge bg-secondary">{{ categorias.produtos.count }} itens</span>
+            </div>
+
+            {% if categorias.produtos.exists %}
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Produto</th>
+                                <th>Preço</th>
+                                <th>Estoque</th>
+                                <th class="text-end">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for produto in category.produtos.all %}
+                            <tr>
+                                <td>
+                                    <a href="{% url 'produtos:detail' pk=produto.id %}" class="text-dark text-decoration-none fw-bold">
+                                        {{ produto.name }}
+                                    </a>
+                                </td>
+                                <td>R$ {{ produto.price }}</td>
+                                <td>
+                                    {% if produto.quantity < 5 %}
+                                        <span class="text-danger fw-bold">{{ produto.quantity }}</span>
+                                    {% else %}
+                                        {{ produto.quantity }}
+                                    {% endif %}
+                                </td>
+                                <td class="text-end">
+                                    <a href="{% url 'produtos:detail' pk=produto.id %}" class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-eye"></i> Ver
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="alert alert-light text-center text-muted border">
+                    <i class="fas fa-box-open me-2"></i> Nenhum produto vinculado diretamente a esta categoria.
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="card-footer bg-white d-flex justify-content-end gap-2 py-3">
+            <a href="{% url 'categorias:index' %}" class="btn btn-secondary">Voltar</a>
+            <a href="{% url 'categorias:edit' pk=categorias.id %}" class="btn btn-primary">Editar</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

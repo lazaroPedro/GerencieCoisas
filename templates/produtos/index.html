@@ -26,11 +26,14 @@
                     </thead>
                     <tbody>
                         {% for produto in produtos %}
+
+
+
                         <tr>
-                            <td>
+                            <td><a href="{% url 'produtos:detail' pk=produto.id  %}">
                                 <strong>{{ produto.name }}</strong>
                                 <br>
-                                <small class="text-muted">{{ produto.description|truncatechars:50 }}</small>
+                                <small class="text-muted">{{ produto.description|truncatechars:50 }}</small></a>
                             </td>
                             <td>R$ {{ produto.price }}</td>
                             <td>{{ produto.quantity }}</td>

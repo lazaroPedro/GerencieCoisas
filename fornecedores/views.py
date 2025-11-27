@@ -39,3 +39,7 @@ def delete(request, pk):
     else:
         form = FornecedorForm(instance=fornecedor)
     return render(request, 'fornecedores/delete.html', {'form': form, 'fornecedor': fornecedor})
+
+def detail(request, pk):
+    fornecedor = Fornecedor.objects.get(id=pk)
+    return render(request, 'fornecedores/detail.html', {'fornecedor': fornecedor})

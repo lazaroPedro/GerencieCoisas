@@ -42,5 +42,8 @@ def delete(request, pk):
         form = ProdutoForm(instance=produto)
     return render(request, 'produtos/delete.html', {'form': form, 'produto': produto})
 
+def detail(request, pk):
+    produto = Produto.objects.get(id=pk)
+    return render(request, 'produtos/detail.html', {'produto': produto})
 
 
