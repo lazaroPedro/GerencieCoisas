@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3><i class="fas fa-users-cog me-2"></i> Gerentes cadastrados</h3>
+        <a href="{% url 'criar_gerente' %}" class="btn btn-primary">
+            <i class="fas fa-user-plus me-1"></i> Novo gerente
+        </a>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            {% if gerentes %}
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Usuário</th>
+                            <th>Nome</th>
+                            <th>E-mail</th>
+                            <th class="text-end">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for g in gerentes %}
+                        <tr>
+                            <td>{{ g.username }}</td>
+                            <td>{{ g.get_full_name|default:"-" }}</td>
+                            <td>{{ g.email|default:"-" }}</td>
+                            <td class="text-end">
+                                <a href="{% url 'editar_gerente' g.id %}" class="btn btn-sm btn-outline-secondary">
+                                    <i class="fas fa-edit me-1"></i> Editar
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p class="text-muted mb-0">Nenhum gerente cadastrado.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

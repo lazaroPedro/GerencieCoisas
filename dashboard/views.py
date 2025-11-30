@@ -1,13 +1,12 @@
 from django.shortcuts import render
-
+from django.contrib.auth.decorators import login_required, permission_required   
 from categorias.models import Categoria
 from fornecedores.models import Fornecedor
 from produtos.models import Produto
 
 from django.db.models import Sum, F
 
-# Create your views here.
-
+@login_required
 def index(request):
     # Contadores Simples
     total_produtos = Produto.objects.count()

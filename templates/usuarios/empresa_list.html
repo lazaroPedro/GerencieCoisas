@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2>Empresas</h2>
+  <a href="{% url 'empresa_create' %}" class="btn btn-primary mb-3">Nova empresa</a>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>CNPJ</th>
+        <th>Ativa?</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for empresa in empresas %}
+      <tr>
+        <td>{{ empresa.nome }}</td>
+        <td>{{ empresa.cnpj }}</td>
+        <td>{{ empresa.ativo|yesno:"Sim,Não" }}</td>
+        <td>
+          <a href="{% url 'empresa_edit' empresa.pk %}" class="btn btn-sm btn-warning">Editar</a>
+          <a href="{% url 'empresa_delete' empresa.pk %}" class="btn btn-sm btn-danger">Excluir</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="4">Nenhuma empresa cadastrada.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

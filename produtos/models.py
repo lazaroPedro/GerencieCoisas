@@ -1,8 +1,6 @@
 from django.core.exceptions import ValidationError
 from django.db import models
 
-# Create your models here.
-
 class Produto(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
@@ -15,7 +13,7 @@ class Produto(models.Model):
     category = models.ForeignKey(
         'categorias.Categoria',
         on_delete=models.PROTECT,
-        verbose_name="Subcategoria",
+        verbose_name="Categoria",
         related_name="produtos"
     )
     supplier = models.ManyToManyField(

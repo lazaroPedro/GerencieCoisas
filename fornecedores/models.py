@@ -1,6 +1,5 @@
 from django.db import models
 
-# Create your models here.
 class Fornecedor(models.Model):
     name = models.CharField("Nome Fantasia", max_length=100)
     corporate_name = models.CharField("Razão Social", max_length=100)

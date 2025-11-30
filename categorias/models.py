@@ -1,11 +1,9 @@
 from django.db import models
 
-# Create your models here.
-
 class Categoria(models.Model):
 
     parent = models.ForeignKey(
-        'self',
+        'categorias.Categoria', 
         on_delete=models.CASCADE,
         null=True,
         blank=True,

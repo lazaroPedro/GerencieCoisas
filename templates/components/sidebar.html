@@ -10,63 +10,113 @@
     <!-- Menu de Navegação -->
     <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-item">
-            <a href="#" class="nav-link text-white" aria-current="page">
+            <a href="{% url 'index' %}"
+               class="nav-link text-white {% if request.resolver_match.url_name == 'index' %}active{% endif %}"
+               aria-current="page">
                 <i class="fas fa-tachometer-alt me-2" style="width: 20px;"></i>
                 Dashboard
             </a>
         </li>
 
-        <!-- Seção de Cadastros -->
+        {# Só mostra a seção "Cadastros" se o usuário tiver permissão em pelo menos um app #}
+        {% if perms.produtos.view_produto or perms.categorias.view_categoria or perms.fornecedores.view_fornecedor %}
+
         <li class="mt-3 text-uppercase text-muted small fw-bold px-3">
             Cadastros
         </li>
+
+        {% if perms.produtos.view_produto %}
         <li>
-            <a href="{% url 'produtos:index' %}" class="nav-link text-white {% if request.resolver_match.url_name == 'index' %}active{% endif %}">
+            <a href="{% url 'produtos:index' %}"
+               class="nav-link text-white {% if request.resolver_match.namespace == 'produtos' %}active{% endif %}">
                 <i class="fas fa-box-open me-2" style="width: 20px;"></i>
                 Produtos
             </a>
         </li>
+        {% endif %}
+
+        {% if perms.categorias.view_categoria %}
         <li>
-            <a href="{% url 'categorias:index' %}" class="nav-link text-white {% if 'category' in request.resolver_match.url_name %}active{% endif %}">
+            <a href="{% url 'categorias:index' %}"
+               class="nav-link text-white {% if request.resolver_match.namespace == 'categorias' %}active{% endif %}">
                 <i class="fas fa-tags me-2" style="width: 20px;"></i>
                 Categorias
             </a>
         </li>
+        {% endif %}
+
+        {% if perms.fornecedores.view_fornecedor %}
         <li>
-            <a href="{% url 'fornecedores:index' %}" class="nav-link text-white {% if 'fornecedor' in request.resolver_match.url_name %}active{% endif %}">
+            <a href="{% url 'fornecedores:index' %}"
+               class="nav-link text-white {% if request.resolver_match.namespace == 'fornecedores' %}active{% endif %}">
                 <i class="fas fa-truck me-2" style="width: 20px;"></i>
                 Fornecedores
             </a>
         </li>
+        {% endif %}
+
+        {% endif %} {# fim seção Cadastros #}
+
+        {# Só o dono (quem tem permissão de criar usuário) vê o botão de cadastrar gerente #}
+        {% if perms.auth.add_user %}
+        <li class="mt-3 text-uppercase text-muted small fw-bold px-3">
+            Administração
+        </li>
+        <li>
+            <a href="{% url 'criar_gerente' %}"
+               class="nav-link text-white {% if request.resolver_match.url_name == 'criar_gerente' %}active{% endif %}">
+                <i class="fas fa-user-cog me-2" style="width: 20px;"></i>
+                Cadastrar gerente
+            </a>
+        </li>
+        {% endif %}
 
         <!-- Seção de Estoque (Futuro) -->
         <li class="mt-3 text-uppercase text-muted small fw-bold px-3">
             Gestão
         </li>
-        <li>
-            <a href="#" class="nav-link text-white disabled">
-                <i class="fas fa-exchange-alt me-2" style="width: 20px;"></i>
-                Movimentações
-                <span class="badge bg-secondary ms-2">Em breve</span>
-            </a>
-        </li>
+            <li>
+                <a href="{% url 'movimentacoes:lista' %}"
+                class="nav-link text-white {% if request.resolver_match.namespace == 'movimentacoes' %}active{% endif %}">
+                    <i class="fas fa-exchange-alt me-2" style="width: 20px;"></i>
+                    Movimentações
+                </a>
+            </li>
+
     </ul>
 
     <hr>
 
     <!-- Rodapé da Sidebar / Usuário -->
-    <div class="dropdown">
-        <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-            <div class="bg-primary rounded-circle d-flex justify-content-center align-items-center me-2" style="width: 32px; height: 32px;">
-                <i class="fas fa-user"></i>
-            </div>
-            <strong>Admin</strong>
-        </a>
-        <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
-            <li><a class="dropdown-item" href="#">Configurações</a></li>
-            <li><a class="dropdown-item" href="#">Perfil</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Sair</a></li>
-        </ul>
-    </div>
+<!-- Rodapé da Sidebar / Usuário -->
+<div class="dropdown">
+    <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+       id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+        <div class="bg-primary rounded-circle d-flex justify-content-center align-items-center me-2"
+             style="width: 32px; height: 32px;">
+            <i class="fas fa-user"></i>
+        </div>
+        <strong>
+            {% if request.user.is_authenticated %}
+                {{ request.user.get_full_name|default:request.user.username }}
+            {% else %}
+                Usuário
+            {% endif %}
+        </strong>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+        <li>
+            <a class="dropdown-item" href="{% url 'perfil' %}">
+                <i class="fas fa-id-card me-2"></i> Meu perfil
+            </a>
+        </li>
+        <li><hr class="dropdown-divider"></li>
+        <li>
+            <a class="dropdown-item" href="{% url 'logout' %}">
+                <i class="fas fa-sign-out-alt me-2"></i> Sair
+            </a>
+        </li>
+    </ul>
+</div>
+
 </div>

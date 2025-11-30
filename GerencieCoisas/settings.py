@@ -40,8 +40,14 @@ INSTALLED_APPS = [
     'produtos.apps.ProdutosConfig',
     'categorias.apps.CategoriasConfig',
     'fornecedores.apps.FornecedoresConfig',
-    'dashboard.apps.DashboardConfig'
+    'dashboard.apps.DashboardConfig',
+    'usuarios.apps.UsuariosConfig',
+    "movimentacoes.apps.MovimentacoesConfig",
 ]
+
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'index' 
+LOGOUT_REDIRECT_URL = 'login'       
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

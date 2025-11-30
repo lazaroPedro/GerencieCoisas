@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Movimentações{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="mb-0">Movimentações</h2>
+        <small class="text-muted">
+            Você está vendo apenas as movimentações permitidas para o seu perfil.
+        </small>
+    </div>
+
+    {% if movimentacoes %}
+        <div class="table-responsive">
+            <table class="table table-striped table-hover table-sm align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Data/Hora</th>
+                        <th>Usuário</th>
+                        <th>Módulo</th>
+                        <th>Modelo</th>
+                        <th>ID objeto</th>
+                        <th>Ação</th>
+                        <th>Descrição</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for mov in movimentacoes %}
+                        <tr>
+                            <td>{{ mov.criado_em|date:"d/m/Y H:i" }}</td>
+
+                            <td>
+                                {% if mov.usuario %}
+                                    {{ mov.usuario.get_full_name|default:mov.usuario.username }}
+                                {% else %}
+                                    <span class="text-muted">Sistema</span>
+                                {% endif %}
+                            </td>
+
+                            <td>{{ mov.content_type.app_label }}</td>
+                            <td>{{ mov.content_type.model }}</td>
+                            <td>{{ mov.object_id }}</td>
+
+                            <td>
+                                {% if mov.acao == "create" %}
+                                    <span class="badge bg-success">Criação</span>
+                                {% elif mov.acao == "update" %}
+                                    <span class="badge bg-warning text-dark">Edição</span>
+                                {% elif mov.acao == "delete" %}
+                                    <span class="badge bg-danger">Exclusão</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">{{ mov.acao }}</span>
+                                {% endif %}
+                            </td>
+
+                            <td>{{ mov.descricao|default:"—" }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            Nenhuma movimentação encontrada para o seu perfil de acesso.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
