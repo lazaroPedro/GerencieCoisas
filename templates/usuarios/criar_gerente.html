@@ -1,156 +1,162 @@
-{# templates/usuarios/criar_gerente.html #}
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container mt-4">
-    <div class="row justify-content-center">
-        <div class="col-md-7">
-            <div class="card shadow">
-                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                    <h4 class="mb-0">
-                        <i class="fas fa-user-cog me-2"></i> Cadastrar Gerente
-                    </h4>
+<div class="page-header mb-4">
+    <div>
+        <h4 class="fw-bold mb-1">Cadastrar Novo Gerente</h4>
+        <h6 class="text-muted mb-0">Defina os dados de acesso e as permissões administrativas</h6>
+    </div>
+</div>
 
-                    {# Link para listar gerentes cadastrados (só o dono vê) #}
-                    {% if perms.auth.add_user %}
-                    <a href="{% url 'listar_gerentes' %}" class="btn btn-outline-light btn-sm">
-                        <i class="fas fa-users-cog me-1"></i> Ver gerentes
-                    </a>
-                    {% endif %}
-                </div>
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="card border-0 shadow-sm rounded-3">
+            <div class="card-body p-5">
+                
+                <form method="post" id="gerenteForm">
+                    {% csrf_token %}
 
-                <div class="card-body">
-                    <div class="alert alert-info small mb-3">
-                        <i class="fas fa-info-circle"></i>
-                        <strong>Dica:</strong> Este usuário será criado como gerente do sistema.
-                        Marque abaixo quais áreas ele poderá gerenciar (Produtos, Categorias, Fornecedores).
-                    </div>
+                    <div class="mb-5">
+                        <h5 class="fw-bold text-dark mb-4 pb-2 border-bottom">
+                            <i class="fas fa-user-circle me-2 text-primary"></i>Dados de Acesso
+                        </h5>
+                        
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold text-muted small text-uppercase">Usuário (Login)</label>
+                                {{ form.username }}
+                                {% if form.username.errors %}
+                                    <div class="text-danger small mt-1">{{ form.username.errors.0 }}</div>
+                                {% endif %}
+                            </div>
 
-                    <form method="post">
-                        {% csrf_token %}
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold text-muted small text-uppercase">E-mail</label>
+                                {{ form.email }}
+                                {% if form.email.errors %}
+                                    <div class="text-danger small mt-1">{{ form.email.errors.0 }}</div>
+                                {% endif %}
+                            </div>
 
-                        {# Dados básicos do usuário #}
-                        <h5 class="mb-3 border-bottom pb-2">Dados do usuário</h5>
-
-                        <div class="mb-3">
-                            <label for="{{ form.username.id_for_label }}" class="form-label fw-bold">
-                                {{ form.username.label }}
-                            </label>
-                            {{ form.username }}
-                            {% if form.username.errors %}
-                                <div class="text-danger small mt-1">
-                                    {{ form.username.errors.0 }}
-                                </div>
-                            {% endif %}
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="{{ form.first_name.id_for_label }}" class="form-label fw-bold">
-                                    {{ form.first_name.label }}
-                                </label>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold text-muted small text-uppercase">Nome</label>
                                 {{ form.first_name }}
-                                {% if form.first_name.errors %}
-                                    <div class="text-danger small mt-1">
-                                        {{ form.first_name.errors.0 }}
-                                    </div>
-                                {% endif %}
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="{{ form.last_name.id_for_label }}" class="form-label fw-bold">
-                                    {{ form.last_name.label }}
-                                </label>
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold text-muted small text-uppercase">Sobrenome</label>
                                 {{ form.last_name }}
-                                {% if form.last_name.errors %}
-                                    <div class="text-danger small mt-1">
-                                        {{ form.last_name.errors.0 }}
-                                    </div>
-                                {% endif %}
                             </div>
-                        </div>
 
-                        <div class="mb-3">
-                            <label for="{{ form.email.id_for_label }}" class="form-label fw-bold">
-                                {{ form.email.label }}
-                            </label>
-                            {{ form.email }}
-                            {% if form.email.errors %}
-                                <div class="text-danger small mt-1">
-                                    {{ form.email.errors.0 }}
-                                </div>
-                            {% endif %}
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="{{ form.password1.id_for_label }}" class="form-label fw-bold">
-                                    {{ form.password1.label }}
-                                </label>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold text-muted small text-uppercase">Senha</label>
                                 {{ form.password1 }}
                                 {% if form.password1.errors %}
-                                    <div class="text-danger small mt-1">
-                                        {{ form.password1.errors.0 }}
-                                    </div>
+                                    <div class="text-danger small mt-1">{{ form.password1.errors.0 }}</div>
                                 {% endif %}
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="{{ form.password2.id_for_label }}" class="form-label fw-bold">
-                                    {{ form.password2.label }}
-                                </label>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold text-muted small text-uppercase">Confirmar Senha</label>
                                 {{ form.password2 }}
                                 {% if form.password2.errors %}
-                                    <div class="text-danger small mt-1">
-                                        {{ form.password2.errors.0 }}
-                                    </div>
+                                    <div class="text-danger small mt-1">{{ form.password2.errors.0 }}</div>
                                 {% endif %}
                             </div>
                         </div>
+                    </div>
 
-                        {# Permissões de gerenciamento #}
-                        <h5 class="mt-4 mb-3 border-bottom pb-2">Permissões de acesso</h5>
+                    <div class="mb-4">
+                        <h5 class="fw-bold text-dark mb-3 pb-2 border-bottom">
+                            <i class="fas fa-lock me-2 text-primary"></i>Permissões do Sistema
+                        </h5>
+                        <p class="text-muted small mb-4">Clique nos cards abaixo para liberar o acesso aos módulos.</p>
 
-                        <div class="row">
-                            <div class="col-md-4 mb-2">
-                                <div class="form-check">
-                                    {{ form.manage_produtos }}
-                                    <label class="form-check-label fw-semibold" for="{{ form.manage_produtos.id_for_label }}">
-                                        {{ form.manage_produtos.label }}
-                                    </label>
-                                </div>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="card h-100 permission-card p-3 d-block position-relative" for="{{ form.manage_produtos.id_for_label }}">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div class="text-center w-100 mt-2">
+                                            <i class="fas fa-box fa-2x mb-3 text-secondary icon-state"></i>
+                                            <h6 class="fw-bold mb-1">Gerenciar Produtos</h6>
+                                            <p class="text-muted small mb-0">Criar, editar e excluir itens do estoque.</p>
+                                        </div>
+                                        <div class="position-absolute top-0 end-0 p-3">
+                                            <div class="form-check form-switch">
+                                                {{ form.manage_produtos }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </label>
                             </div>
-                            <div class="col-md-4 mb-2">
-                                <div class="form-check">
-                                    {{ form.manage_categorias }}
-                                    <label class="form-check-label fw-semibold" for="{{ form.manage_categorias.id_for_label }}">
-                                        {{ form.manage_categorias.label }}
-                                    </label>
-                                </div>
+
+                            <div class="col-md-4">
+                                <label class="card h-100 permission-card p-3 d-block position-relative" for="{{ form.manage_categorias.id_for_label }}">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div class="text-center w-100 mt-2">
+                                            <i class="fas fa-tags fa-2x mb-3 text-secondary icon-state"></i>
+                                            <h6 class="fw-bold mb-1">Gerenciar Categorias</h6>
+                                            <p class="text-muted small mb-0">Organizar a hierarquia de produtos.</p>
+                                        </div>
+                                        <div class="position-absolute top-0 end-0 p-3">
+                                            <div class="form-check form-switch">
+                                                {{ form.manage_categorias }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </label>
                             </div>
-                            <div class="col-md-4 mb-2">
-                                <div class="form-check">
-                                    {{ form.manage_fornecedores }}
-                                    <label class="form-check-label fw-semibold" for="{{ form.manage_fornecedores.id_for_label }}">
-                                        {{ form.manage_fornecedores.label }}
-                                    </label>
-                                </div>
+
+                            <div class="col-md-4">
+                                <label class="card h-100 permission-card p-3 d-block position-relative" for="{{ form.manage_fornecedores.id_for_label }}">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div class="text-center w-100 mt-2">
+                                            <i class="fas fa-truck fa-2x mb-3 text-secondary icon-state"></i>
+                                            <h6 class="fw-bold mb-1">Gerenciar Fornecedores</h6>
+                                            <p class="text-muted small mb-0">Cadastrar empresas parceiras.</p>
+                                        </div>
+                                        <div class="position-absolute top-0 end-0 p-3">
+                                            <div class="form-check form-switch">
+                                                {{ form.manage_fornecedores }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </label>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="form-text text-muted mb-3">
-                            As permissões definem em quais telas de CRUD este gerente poderá criar,
-                            editar, visualizar e excluir registros.
-                        </div>
-
-                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
-                            <a href="{% url 'index' %}" class="btn btn-secondary me-md-2">Cancelar</a>
-                            <button type="submit" class="btn btn-success">
-                                <i class="fas fa-save me-1"></i> Salvar Gerente
-                            </button>
-                        </div>
-                    </form>
-                </div>
+                    <div class="d-flex justify-content-end gap-3 mt-5 pt-3 border-top">
+                        <a href="{% url 'listar_gerentes' %}" class="btn btn-light border text-secondary px-4 fw-bold">Cancelar</a>
+                        <button type="submit" class="btn btn-success text-white px-5 fw-bold shadow-sm">
+                            <i class="fas fa-check me-2"></i> Salvar Gerente
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const checkboxes = document.querySelectorAll('.permission-card input[type="checkbox"]');
+        
+        function updateCardState(checkbox) {
+            const card = checkbox.closest('.permission-card');
+            if (checkbox.checked) {
+                card.classList.add('active-card');
+            } else {
+                card.classList.remove('active-card');
+            }
+        }
+
+        checkboxes.forEach(chk => {
+            updateCardState(chk);
+            
+            chk.addEventListener('change', function() {
+                updateCardState(this);
+            });
+        });
+    });
+</script>
 {% endblock %}

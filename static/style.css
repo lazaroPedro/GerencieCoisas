@@ -143,3 +143,24 @@ body {
 .action-icon:hover {
     background-color: #eee;
 }
+
+.permission-card {
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    border: 2px solid #e9ecef;
+}
+
+.permission-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    border-color: #dee2e6;
+}
+
+.permission-card.active-card {
+    border-color: var(--primary-color);
+    background-color: #fff8f3;
+}
+
+.permission-card.active-card .icon-state {
+    color: var(--primary-color) !important;
+}
