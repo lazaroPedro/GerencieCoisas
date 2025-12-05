@@ -45,7 +45,7 @@ def perfil_view(request):
     return render(request, "usuarios/perfil.html", {"form": form})
 
 
-@login_required
+login_required
 @permission_required("auth.add_user", raise_exception=True)
 def listar_gerentes(request):
     grupos_gerente = Group.objects.filter(
@@ -53,7 +53,12 @@ def listar_gerentes(request):
     )
     gerentes = User.objects.filter(groups__in=grupos_gerente).distinct()
 
-    return render(request, "usuarios/listar_gerentes.html", {"gerentes": gerentes})
+    for g in gerentes:
+        g.has_perm_produtos = g.groups.filter(name="GerenteProdutos").exists()
+        g.has_perm_categorias = g.groups.filter(name="GerenteCategorias").exists()
+        g.has_perm_fornecedores = g.groups.filter(name="GerenteFornecedores").exists()
+
+    return render(request, "usuarios/lista_gerentes.html", {"gerentes": gerentes})
 
 
 def login_view(request):
@@ -254,6 +259,38 @@ def password_change_view(request):
         form = PasswordChangeForm(user=request.user)
 
     return render(request, "usuarios/password_change.html", {"form": form})
+
+@login_required
+@permission_required("auth.delete_user", raise_exception=True)
+def deletar_gerente(request, user_id):
+    gerente = get_object_or_404(User, pk=user_id)
+
+
+    if gerente == request.user:
+        messages.error(request, "Você não pode excluir sua própria conta.")
+        return redirect("listar_gerentes")
+
+
+    if request.method == "POST":
+        nome_removido = gerente.username
+        
+     
+        try:
+            registrar_movimentacao(
+                usuario=request.user,
+                acao=Movimentacao.ACAO_EDICAO, 
+                instance=gerente,
+                descricao=f"Gerente '{nome_removido}' excluído permanentemente."
+            )
+        except Exception:
+            pass 
+
+        gerente.delete()
+        messages.success(request, f"Gerente '{nome_removido}' excluído com sucesso.")
+    
+    return redirect("listar_gerentes")
+
+
 
 
 @login_required
