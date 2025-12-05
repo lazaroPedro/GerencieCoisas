@@ -72,8 +72,6 @@ source venv/bin/activate
 pip install django
 ```
 
-*(Se houver um arquivo requirements.txt, use: `pip install -r requirements.txt`)*
-
 ### 4\. Aplique as migrações do banco de dados
 
 ```bash
