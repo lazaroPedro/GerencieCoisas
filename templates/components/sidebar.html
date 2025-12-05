@@ -39,10 +39,12 @@
         {% endif %}
 
         <li class="{% if 'movimentacoes' in request.path %}active{% endif %}">
-            <a href="{% url 'movimentacoes:lista' %}">
+            <a href="{% url 'movimentacoes:lista_movimentacoes' %}">
                 <i class="fas fa-exchange-alt"></i> Movimentações
             </a>
         </li>
+        
+        
 
         {% if perms.auth.add_user %}
         <li class="px-3 mt-4 mb-2 text-uppercase small text-muted fw-bold">Admin</li>

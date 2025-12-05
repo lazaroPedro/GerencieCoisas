@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6">
+        <div class="card border-0 shadow-sm rounded-3">
+            <div class="card-header bg-white border-bottom-0 pt-4 px-4">
+                <h5 class="fw-bold mb-0">Editar Registro de Movimentação</h5>
+            </div>
+            <div class="card-body p-4">
+                <div class="alert alert-warning small">
+                    <i class="fas fa-exclamation-triangle me-1"></i>
+                    <strong>Atenção:</strong> Você está editando apenas o registro histórico (log). 
+                    Alterar a descrição aqui <strong>não</strong> muda a quantidade no estoque do produto.
+                </div>
+
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Descrição da Movimentação</label>
+                        <textarea name="descricao" rows="4" class="form-control">{{ mov.descricao }}</textarea>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% url 'movimentacoes:lista_movimentacoes' %}" class="btn btn-light border">Cancelar</a>
+                        <button type="submit" class="btn btn-primary fw-bold">Salvar Alterações</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

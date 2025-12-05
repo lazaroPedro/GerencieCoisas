@@ -1,54 +1,107 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
-<div class="container mt-4">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow">
-                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                    <h4 class="mb-0">
-                        <i class="fas fa-id-card me-2"></i> Meu Perfil
-                    </h4>
+<!-- Cabeçalho da Página -->
+<div class="page-header mb-4">
+    <div>
+        <h4 class="fw-bold mb-1">Meu Perfil</h4>
+        <h6 class="text-muted mb-0">Gerencie suas informações pessoais e de acesso</h6>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-8 col-xl-7">
+        <div class="card border-0 shadow-sm rounded-3">
+            <div class="card-body p-5">
+                
+                <!-- Seção Visual do Perfil (Avatar e Nome) -->
+                <div class="d-flex align-items-center mb-5 border-bottom pb-4">
+                    <div class="bg-light rounded-circle d-flex align-items-center justify-content-center me-4 text-primary border" style="width: 80px; height: 80px; font-size: 2.5rem;">
+                        <!-- Mostra a primeira letra do usuário -->
+                        {{ request.user.username|make_list|first|upper }}
+                    </div>
+                    <div>
+                        <h3 class="fw-bold text-dark mb-0">{{ request.user.get_full_name|default:request.user.username }}</h3>
+                        <p class="text-muted mb-0">@{{ request.user.username }}</p>
+                        <span class="badge bg-success bg-opacity-10 text-success mt-2 rounded-pill px-3">
+                            {% if request.user.is_superuser %}Administrador{% else %}Colaborador{% endif %}
+                        </span>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <form method="post">
-                        {% csrf_token %}
 
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Usuário (login)</label>
-                            <input type="text" class="form-control" value="{{ request.user.username }}" disabled>
-                            <div class="form-text text-muted">
-                                O nome de usuário é usado para login e não pode ser alterado aqui.
-                            </div>
+                <form method="post">
+                    {% csrf_token %}
+
+                    <!-- Campo de Usuário (Somente Leitura) -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold text-muted small text-uppercase">Usuário (Login)</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0 text-muted">
+                                <i class="fas fa-user-lock"></i>
+                            </span>
+                            <input type="text" class="form-control bg-light text-muted border-start-0" value="{{ request.user.username }}" disabled readonly>
                         </div>
+                        <div class="form-text text-muted small mt-1">
+                            <i class="fas fa-info-circle me-1"></i> O nome de usuário é sua credencial de acesso e não pode ser alterado.
+                        </div>
+                    </div>
 
+                    <!-- Campos do Formulário (Nome, Sobrenome, Email) -->
+                    <div class="row g-4">
                         {% for field in form %}
-                        <div class="mb-3">
-                            <label for="{{ field.id_for_label }}" class="form-label fw-bold">
+                        <div class="col-12">
+                            <label for="{{ field.id_for_label }}" class="form-label fw-bold text-muted small text-uppercase">
                                 {{ field.label }}
                             </label>
+                            
+                            <!-- Renderiza o campo -->
                             {{ field }}
+                            
                             {% if field.errors %}
                                 <div class="text-danger small mt-1">
-                                    {{ field.errors.0 }}
+                                    <i class="fas fa-exclamation-circle me-1"></i>{{ field.errors.0 }}
                                 </div>
                             {% endif %}
                         </div>
                         {% endfor %}
+                    </div>
 
-                        <div class="d-flex justify-content-between align-items-center mt-3">
-                                <a href="{% url 'password_change' %}" class="btn btn-outline-secondary btn-sm">
-                                    <i class="fas fa-key me-1"></i> Redefinir senha
-                                </a>
+                    <!-- Ações (Botões) -->
+                    <div class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top">
+                        <a href="{% url 'password_change' %}" class="btn btn-light border text-secondary fw-bold action-btn">
+                            <i class="fas fa-key me-2 text-warning"></i> Alterar Senha
+                        </a>
 
-                            <button type="submit" class="btn btn-success">
-                                <i class="fas fa-save me-1"></i> Salvar alterações
-                            </button>
-                        </div>
-                    </form>
-                </div>
+                        <button type="submit" class="btn btn-primary px-4 fw-bold shadow-sm action-btn">
+                            <i class="fas fa-save me-2"></i> Salvar Alterações
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Script extra para garantir estilo nos inputs caso o Django não renderize a classe form-control automaticamente -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var inputs = document.querySelectorAll('input[type="text"], input[type="email"]');
+        inputs.forEach(function(input) {
+            if (!input.classList.contains('form-control')) {
+                input.classList.add('form-control');
+                input.classList.add('form-control-lg'); // Deixa os inputs um pouco maiores, mais elegantes
+            }
+        });
+    });
+</script>
+
+<style>
+    .action-btn {
+        transition: all 0.2s;
+    }
+    .action-btn:hover {
+        transform: translateY(-2px);
+    }
+</style>
 {% endblock %}
