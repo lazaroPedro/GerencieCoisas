@@ -54,17 +54,18 @@ def edit(request, pk):
 @login_required
 @permission_required("categorias.delete_categoria", raise_exception=True)
 def delete(request, pk):
+    categorias = Categoria.objects.get(id=pk)
     if request.method == 'POST':
-        categoria_repr = str(categoria)
+        categoria_repr = str(categorias)
 
         registrar_movimentacao(
             usuario=request.user,
             acao=Movimentacao.ACAO_EXCLUSAO,
-            instance=categoria,
+            instance=categorias,
             descricao=f"Categoria excluída: {categoria_repr}",
         )
 
-        categoria.delete()
+        categorias.delete()
         return redirect('categorias:index')
     else:
         form = CategoriaForm(instance=categorias)

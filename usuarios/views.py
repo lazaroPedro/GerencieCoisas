@@ -6,7 +6,7 @@ from django.contrib.auth.models import User, Group, Permission
 from django.forms.models import model_to_dict
 from django.shortcuts import redirect, render, get_object_or_404
 
-from .forms import GerenteCreationForm, PerfilForm, GerenteEditForm
+from .forms import GerenteCreationForm, PerfilForm, GerenteEditForm, SignUpForm
 from movimentacoes.utils import registrar_movimentacao
 from movimentacoes.models import Movimentacao
 
@@ -291,7 +291,34 @@ def deletar_gerente(request, user_id):
     return redirect("listar_gerentes")
 
 
+def signup_view(request):
+    if request.user.is_authenticated:
+        return redirect("index")
 
+    if request.method == "POST":
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+
+            # Opcional: Registrar movimentação de criação do usuário
+            registrar_movimentacao(
+                usuario=user,  # O próprio usuário se criou
+                acao=Movimentacao.ACAO_CRIACAO,
+                instance=user,
+                descricao=f"Auto-cadastro realizado. Usuário: {user.username}"
+            )
+
+            # Faz o login automático após o cadastro
+            login(request, user)
+            messages.success(request, f"Bem-vindo, {user.first_name}! Sua conta foi criada.")
+            return redirect("index")
+        else:
+            messages.error(request, "Erro ao criar conta. Verifique os dados abaixo.")
+    else:
+        form = SignUpForm()
+
+    # Note que aqui referenciamos o template que criamos antes
+    return render(request, "usuarios/signup.html", {"form": form})
 
 @login_required
 def password_change_done_view(request):

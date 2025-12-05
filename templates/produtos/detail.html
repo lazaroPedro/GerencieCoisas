@@ -1,94 +1,99 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container mt-4">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow-sm">
-                <!-- Cabeçalho -->
-                <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
-                    <h4 class="mb-0 text-primary">{{ produto.name }}</h4>
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h4 class="fw-bold mb-1">Detalhes do Produto</h4>
+        <h6 class="text-muted mb-0">Visualizando informações completas</h6>
+    </div>
+    <a href="{% url 'produtos:index' %}" class="btn btn-outline-secondary btn-sm">
+        <i class="fas fa-arrow-left me-1"></i> Voltar
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-lg-8 col-sm-12">
+        <div class="card border-0 shadow-sm rounded-3 mb-4">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start border-bottom pb-3 mb-3">
                     <div>
-                        {% if produto.active %}
-                            <span class="badge bg-success">Ativo</span>
-                        {% else %}
-                            <span class="badge bg-danger">Inativo</span>
-                        {% endif %}
+                        <h3 class="fw-bold text-dark mb-1">{{ produto.name }}</h3>
+                        <span class="badge {% if produto.active %}bg-success{% else %}bg-danger{% endif %} bg-opacity-10 {% if produto.active %}text-success{% else %}text-danger{% endif %}">
+                            {% if produto.active %}Ativo no Sistema{% else %}Inativo{% endif %}
+                        </span>
+                    </div>
+                    <div class="text-end">
+                        <h2 class="text-primary fw-bold mb-0">R$ {{ produto.price }}</h2>
+                        <small class="text-muted">Preço Unitário</small>
                     </div>
                 </div>
 
-                <div class="card-body">
-                    <!-- Preço e Estoque -->
-                    <div class="row mb-4">
-                        <div class="col-md-6">
-                            <h6 class="text-muted text-uppercase small fw-bold">Preço Unitário</h6>
-                            <p class="fs-4">R$ {{ produto.price }}</p>
-                        </div>
-                        <div class="col-md-6">
-                            <h6 class="text-muted text-uppercase small fw-bold">Estoque Atual</h6>
-                            <p class="fs-4">
-                                {{ produto.quantity }} <span class="fs-6 text-muted">unid.</span>
-                                {% if produto.quantity < 5 %}
-                                    <small class="text-danger ms-2"><i class="fas fa-exclamation-triangle"></i> Baixo Estoque</small>
-                                {% endif %}
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- Categoria -->
-                    <div class="mb-4">
-                        <h6 class="text-muted text-uppercase small fw-bold">Categoria</h6>
-                        {% if produto.category %}
-                            <a href="{% url 'categorias:edit' pk=produto.category.id %}" class="text-decoration-none fs-5">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <label class="text-muted small fw-bold text-uppercase">Categoria</label>
+                        <p class="fs-5 text-dark">
+                            {% if produto.category %}
                                 {{ produto.category.name }}
-                            </a>
-                            {% if produto.category.parent %}
-                                <small class="text-muted d-block">Subcategoria de: {{ produto.category.parent.name }}</small>
+                            {% else %}
+                                <span class="text-muted fst-italic">Sem categoria</span>
                             {% endif %}
-                        {% else %}
-                            <span class="text-muted">Sem categoria vinculada</span>
-                        {% endif %}
+                        </p>
                     </div>
-
-                    <!-- Descrição -->
-                    <div class="mb-4">
-                        <h6 class="text-muted text-uppercase small fw-bold">Descrição</h6>
-                        <div class="bg-light p-3 rounded border">
-                            <p class="text-secondary mb-0">{{ produto.description|default:"Nenhuma descrição informada."|linebreaks }}</p>
-                        </div>
-                    </div>
-
-                    <!-- Lista de Fornecedores -->
-                    <div class="mb-4">
-                        <h6 class="text-muted text-uppercase small fw-bold">Fornecedores</h6>
-                        {% if produto.fornecedores.exists %}
-                            <div class="list-group list-group-flush">
-                                {% for f in produto.fornecedores.all %}
-                                    <a href="{% url 'fornecedores:index' pk=f.id %}" class="list-group-item list-group-item-action px-0 border-0">
-                                        <i class="fas fa-truck text-muted me-2"></i> {{ f.name }}
-                                        <small class="text-muted ms-1">({{ f.cnpj }})</small>
-                                    </a>
-                                {% endfor %}
-                            </div>
-                        {% else %}
-                            <p class="text-muted small fst-italic">Nenhum fornecedor vinculado a este produto.</p>
-                        {% endif %}
-                    </div>
-
-                    <hr>
-
-                    <!-- Rodapé -->
-                    <div class="d-flex justify-content-between small text-muted">
-                        <span>Cadastrado em: {{ produto.created|date:"d/m/Y H:i" }}</span>
-                        <span>Última atualização: {{ produto.updated|date:"d/m/Y H:i" }}</span>
+                    <div class="col-md-6">
+                        <label class="text-muted small fw-bold text-uppercase">Estoque Atual</label>
+                        <p class="fs-5 text-dark">
+                            {{ produto.quantity }} <span class="fs-6 text-muted">unid.</span>
+                            {% if produto.quantity < 5 %}
+                                <i class="fas fa-exclamation-triangle text-warning ms-2" title="Estoque Baixo"></i>
+                            {% endif %}
+                        </p>
                     </div>
                 </div>
 
-                <!-- Botões -->
-                <div class="card-footer bg-light d-flex justify-content-end gap-2 py-3">
-                    <a href="{% url 'produtos:index' %}" class="btn btn-secondary">Voltar</a>
+                <div class="mb-3">
+                    <label class="text-muted small fw-bold text-uppercase">Descrição</label>
+                    <div class="bg-light p-3 rounded-3 mt-1">
+                        <p class="mb-0 text-secondary">
+                            {{ produto.description|default:"Nenhuma descrição informada."|linebreaks }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4 col-sm-12">
+        <div class="card border-0 shadow-sm rounded-3 mb-4">
+            <div class="card-header bg-white border-0 py-3">
+                <h5 class="fw-bold mb-0"><i class="fas fa-truck me-2 text-primary"></i>Fornecedores</h5>
+            </div>
+            <div class="card-body p-0">
+                {% if produto.supplier.exists %}
+                    <ul class="list-group list-group-flush">
+                        {% for f in produto.supplier.all %}
+                            <li class="list-group-item px-4 py-3 border-light">
+                                <div class="fw-bold text-dark">{{ f.name }}</div>
+                                <div class="small text-muted">{{ f.phone|default:"Sem telefone" }}</div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <div class="p-4 text-center text-muted">
+                        <i class="fas fa-box-open mb-2"></i><br>
+                        Nenhum fornecedor vinculado.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card border-0 shadow-sm rounded-3">
+            <div class="card-body">
+                <div class="d-grid gap-2">
                     <a href="{% url 'produtos:edit' pk=produto.id %}" class="btn btn-primary">
-                        <i class="fas fa-edit"></i> Editar
+                        <i class="fas fa-edit me-2"></i> Editar Produto
+                    </a>
+                    <a href="{% url 'produtos:delete' pk=produto.id %}" class="btn btn-outline-danger">
+                        <i class="fas fa-trash me-2"></i> Excluir Produto
                     </a>
                 </div>
             </div>

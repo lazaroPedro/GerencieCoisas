@@ -1,56 +1,168 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container mt-4">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow">
-                <div class="card-header bg-primary text-white">
-                    <h4 class="mb-0">Cadastrar Novo Produto</h4>
+
+<style>
+    /* ===== Estilos para deixar o formulário mais moderno ===== */
+    .form-section-title {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: #4c4f58;
+        margin-bottom: 0.35rem;
+        text-transform: uppercase;
+        letter-spacing: .5px;
+    }
+
+    .form-label {
+        font-weight: 600 !important;
+        color: #444 !important;
+    }
+
+    .form-control,
+    .form-select {
+        border-radius: .45rem !important;
+        padding: 0.55rem 0.75rem;
+        border-color: #d7d9df;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: #6c63ff !important;
+        box-shadow: 0 0 0 .15rem rgba(108, 99, 255, .15);
+    }
+
+    .card {
+        border-radius: .7rem !important;
+    }
+
+    .input-group-text {
+        background: #f1f2f6 !important;
+        border-radius: .45rem 0 0 .45rem !important;
+        color: #555;
+    }
+
+    .help-text {
+        font-size: 0.78rem;
+        color: #888;
+        margin-top: 2px;
+    }
+
+    .save-btn {
+        border-radius: .45rem;
+        padding: .55rem 1.7rem;
+        font-weight: 600;
+        letter-spacing: 0.3px;
+    }
+
+    .cancel-btn {
+        border-radius: .45rem;
+        padding: .55rem 1.7rem;
+    }
+</style>
+
+<div class="mb-4">
+    <h4 class="fw-bold mb-1">Novo Produto</h4>
+    <p class="text-muted">Preencha as informações para cadastrar um novo item</p>
+</div>
+
+<div class="card shadow-sm border-0">
+    <div class="card-body p-4">
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <!-- INFORMAÇÕES DO PRODUTO -->
+            <div class="mb-3">
+                <div class="form-section-title">Informações Gerais</div>
+            </div>
+
+            <div class="row g-3">
+
+                <div class="col-lg-6 col-12">
+                    <label class="form-label">{{ form.name.label }}</label>
+                    {{ form.name }}
+                    {% if form.name.errors %}
+                        <div class="text-danger small mt-1">{{ form.name.errors.0 }}</div>
+                    {% endif %}
                 </div>
-                <div class="card-body">
-                    <form method="POST">
-                        {% csrf_token %}
 
-                        <!-- Loop para renderizar campos com estilo Bootstrap -->
-                        {% for field in form %}
-                        <div class="mb-3">
-                            <label for="{{ field.id_for_label }}" class="form-label fw-bold">
-                                {{ field.label }}
-                            </label>
+                <div class="col-lg-3 col-sm-6 col-12">
+                    <label class="form-label">{{ form.category.label }}</label>
+                    {{ form.category }}
+                    {% if form.category.errors %}
+                        <div class="text-danger small mt-1">{{ form.category.errors.0 }}</div>
+                    {% endif %}
+                </div>
 
-                            <!-- Campo do formulário -->
-                            <div class="{% if field.field.widget.input_type == 'checkbox' %}form-check{% endif %}">
-                                {{ field }}
-                                {% if field.field.widget.input_type == 'checkbox' %}
-                                    <label class="form-check-label" for="{{ field.id_for_label }}">
-                                        Ativar produto imediatamente
-                                    </label>
-                                {% endif %}
-                            </div>
-
-                            <!-- Erros do campo -->
-                            {% if field.errors %}
-                            <div class="text-danger small mt-1">
-                                {{ field.errors.0 }}
-                            </div>
-                            {% endif %}
-
-                            <!-- Texto de ajuda -->
-                            {% if field.help_text %}
-                            <div class="form-text">{{ field.help_text }}</div>
-                            {% endif %}
-                        </div>
-                        {% endfor %}
-
-                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
-                            <a href="{% url 'produtos:index' %}" class="btn btn-secondary me-md-2">Cancelar</a>
-                            <button type="submit" class="btn btn-success">Salvar Produto</button>
-                        </div>
-                    </form>
+                <div class="col-lg-3 col-sm-6 col-12">
+                    <label class="form-label">{{ form.price.label }}</label>
+                    <div class="input-group">
+                        <span class="input-group-text">R$</span>
+                        {{ form.price }}
+                    </div>
+                    {% if form.price.errors %}
+                        <div class="text-danger small mt-1">{{ form.price.errors.0 }}</div>
+                    {% endif %}
                 </div>
             </div>
-        </div>
+
+            <!-- ESTOQUE -->
+            <div class="mt-4 mb-2">
+                <div class="form-section-title">Controle de Estoque</div>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-lg-3 col-sm-6 col-12">
+                    <label class="form-label">{{ form.quantity.label }}</label>
+                    {{ form.quantity }}
+                    {% if form.quantity.errors %}
+                        <div class="text-danger small mt-1">{{ form.quantity.errors.0 }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="col-lg-9 col-sm-6 col-12">
+                    <label class="form-label">{{ form.supplier.label }}</label>
+                    {{ form.supplier }}
+                    <div class="help-text">
+                        <i class="fas fa-info-circle me-1"></i> Use <strong>Ctrl</strong> (ou Cmd) para selecionar múltiplos fornecedores.
+                    </div>
+                </div>
+            </div>
+
+            <!-- DESCRIÇÃO -->
+            <div class="mt-4 mb-2">
+                <div class="form-section-title">Descrição</div>
+            </div>
+
+            <div class="col-12 mb-3">
+                {{ form.description }}
+                {% if form.description.errors %}
+                    <div class="text-danger small mt-1">{{ form.description.errors.0 }}</div>
+                {% endif %}
+            </div>
+
+            <!-- ATIVO -->
+            <div class="mt-4">
+                <div class="d-flex align-items-center">
+                    {{ form.active }}
+                    <label for="{{ form.active.id_for_label }}" class="ms-2 fw-semibold">
+                        Ativo
+                    </label>
+                </div>
+            </div>
+
+            <!-- BOTÕES -->
+            <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+                <a href="{% url 'produtos:index' %}" class="btn btn-light border text-secondary cancel-btn">
+                    Cancelar
+                </a>
+                <button type="submit" class="btn btn-success text-white save-btn">
+                    <i class="fas fa-save me-2"></i> Salvar Produto
+                </button>
+            </div>
+        </form>
+
     </div>
 </div>
+
 {% endblock %}

@@ -1,0 +1,223 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Conta | GerencieCoisas</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-color: #ff9f43; /* Laranja Original do Tema */
+            --primary-hover: #f58e26;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            padding: 20px 0;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 500px;
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            background: #fff;
+            overflow: hidden;
+        }
+
+        .login-header {
+            background: #fff;
+            padding: 30px 30px 10px 30px;
+            text-align: center;
+        }
+
+        .icon-circle {
+            width: 70px;
+            height: 70px;
+            background-color: rgba(255, 159, 67, 0.1); /* Laranja Suave */
+            color: var(--primary-color);
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+
+        .login-body {
+            padding: 20px 40px 30px 40px;
+        }
+
+        /* Estilo dos Inputs */
+        .input-group-text {
+            background-color: #f8f9fa;
+            border-right: none;
+            color: #999;
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+            min-width: 45px;
+            justify-content: center;
+        }
+
+        .form-control {
+            background-color: #f8f9fa;
+            border-left: none;
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+            padding: 12px;
+            font-size: 15px;
+        }
+
+        .form-control:focus {
+            background-color: #fff;
+            box-shadow: none;
+            border-color: #dee2e6;
+            border-left: 1px solid var(--primary-color); /* Borda Laranja no Foco */
+        }
+
+        /* Muda cor do ícone ao focar no input */
+        .input-group:focus-within .input-group-text {
+            background-color: #fff;
+            border-color: #dee2e6;
+            border-left: 1px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-signup {
+            background-color: var(--primary-color);
+            border: none;
+            border-radius: 10px;
+            padding: 12px;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .btn-signup:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 159, 67, 0.3); /* Sombra Laranja */
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 20px;
+            color: #ccc;
+            font-size: 12px;
+            width: 100%;
+        }
+
+        .form-text { font-size: 0.75rem; color: #999; margin-top: 5px; margin-left: 5px;}
+        ul { list-style: none; padding-left: 0; margin-bottom: 0; }
+        .text-danger { font-size: 0.8rem; margin-top: 5px; }
+    </style>
+</head>
+<body>
+
+    <div class="d-flex flex-column align-items-center w-100">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="icon-circle">
+                    <i class="fas fa-user-plus"></i>
+                </div>
+                <h4 class="fw-bold text-dark mb-1">Criar Conta</h4>
+                <p class="text-muted small mb-0">Preencha os dados abaixo para começar.</p>
+            </div>
+
+            <div class="login-body">
+
+                {% if form.errors %}
+                    <div class="alert alert-danger border-0 bg-danger bg-opacity-10 text-danger small rounded-3 mb-4 py-2">
+                        <div class="fw-bold"><i class="fas fa-exclamation-circle me-1"></i> Atenção:</div>
+                        {{ form.non_field_errors }}
+                        Verifique os campos destacados abaixo.
+                    </div>
+                {% endif %}
+
+                <form method="post" novalidate>
+                    {% csrf_token %}
+
+                    {% for field in form %}
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted ms-1 text-uppercase" style="font-size: 11px;">
+                            {{ field.label }}
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                {% if 'password' in field.name %}
+                                    <i class="fas fa-lock"></i>
+                                {% elif 'email' in field.name %}
+                                    <i class="fas fa-envelope"></i>
+                                {% elif 'username' in field.name %}
+                                    <i class="fas fa-user"></i>
+                                {% elif 'name' in field.name %}
+                                    <i class="fas fa-id-card"></i>
+                                {% else %}
+                                    <i class="fas fa-pen"></i>
+                                {% endif %}
+                            </span>
+                            {{ field }}
+                        </div>
+
+                        {% if field.errors %}
+                            <div class="text-danger ps-2">
+                                {{ field.errors.0 }}
+                            </div>
+                        {% endif %}
+
+                        {% if field.help_text %}
+                            <div class="form-text opacity-75">{{ field.help_text|safe }}</div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+
+                    <div class="d-grid mt-4 mb-3">
+                        <button type="submit" class="btn btn-primary btn-signup text-white">
+                            CADASTRAR AGORA
+                        </button>
+                    </div>
+
+                    <div class="text-center pt-2 border-top">
+                        <a href="{% url 'login' %}" class="text-decoration-none small text-muted">
+                            Já possui uma conta? <span class="fw-bold" style="color: var(--primary-color);">Fazer Login</span>
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var inputs = document.querySelectorAll('input, select');
+            inputs.forEach(function(input) {
+                input.classList.add('form-control');
+
+                if (!input.placeholder) {
+                    if(input.name.includes('username')) input.placeholder = 'Seu usuário de acesso';
+                    if(input.name.includes('email')) input.placeholder = 'exemplo@email.com';
+                    if(input.name.includes('password')) input.placeholder = '••••••••';
+                    if(input.name.includes('first_name')) input.placeholder = 'Seu primeiro nome';
+                    if(input.name.includes('last_name')) input.placeholder = 'Seu sobrenome';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

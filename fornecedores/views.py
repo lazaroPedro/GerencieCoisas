@@ -58,6 +58,7 @@ def edit(request, pk):
 @login_required
 @permission_required("fornecedores.delete_fornecedor", raise_exception=True)
 def delete(request, pk):
+    fornecedor = Fornecedor.objects.get(id=pk)
     if request.method == 'POST':
         fornecedor_repr = str(fornecedor)
 

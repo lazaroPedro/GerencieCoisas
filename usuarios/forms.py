@@ -69,3 +69,14 @@ class GerenteCreationForm(UserCreationForm):
     class Meta:
         model = User
         fields = ("username", "first_name", "last_name", "email")
+
+
+class SignUpForm(UserCreationForm):
+
+    email = forms.EmailField(label="E-mail", required=True)
+    first_name = forms.CharField(label="Nome", required=True, max_length=150)
+    last_name = forms.CharField(label="Sobrenome", required=True, max_length=150)
+
+    class Meta:
+        model = User
+        fields = ("username", "first_name", "last_name", "email")

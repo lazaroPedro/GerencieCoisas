@@ -1,47 +1,147 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card border-danger shadow">
-                <div class="card-header bg-danger text-white">
-                    <h5 class="mb-0">Confirmar Exclusão</h5>
-                </div>
-                <div class="card-body text-center p-5">
-                    <h3 class="text-danger mb-4">Atenção!</h3>
-                    <p class="lead">
-                        Você está prestes a excluir a categoria: <br>
-                        <strong>{{ categorias.name }}</strong>
-                    </p>
+<style>
+    /* ===== Estilos extras para melhorar a aparência ===== */
 
-                    {% if categorias.subcategories.count > 0 %}
-                        <div class="alert alert-warning text-start">
-                            <strong><i class="fas fa-exclamation-triangle"></i> Cuidado:</strong>
-                            Esta é uma categoria PRINCIPAL. Ao excluí-la, você também excluirá
-                            <strong>{{ categorias.subcategories.count }} subcategorias</strong> vinculadas a ela.
-                        </div>
-                    {% endif %}
+    .table-custom thead th {
+        background: #f8f9fc;
+        font-weight: 600;
+        color: #555;
+        border-bottom: 2px solid #edf0f5 !important;
+    }
 
-                    {% if categorias.produtos.count > 0 %}
-                        <div class="alert alert-warning text-start">
-                             <strong><i class="fas fa-box-open"></i> Impacto nos Produtos:</strong>
-                             Existem <strong>{{ categorias.produtos.count }} produtos</strong> nesta categoria.
-                             Eles ficarão sem categoria (null) após esta ação.
-                        </div>
-                    {% endif %}
+    .table-custom tbody tr {
+        transition: background 0.15s ease-in-out;
+    }
 
-                    <p class="text-muted small">Essa ação não pode ser desfeita.</p>
+    .table-custom tbody tr:hover {
+        background: #f7f9ff;
+    }
 
-                    <form method="POST" class="mt-4">
-                        {% csrf_token %}
-                        <div class="d-grid gap-2 d-md-flex justify-content-center">
-                            <a href="{% url 'categorias:index' %}" class="btn btn-secondary px-4">Cancelar</a>
-                            <button type="submit" class="btn btn-danger px-4">Excluir</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+    .category-main {
+        font-weight: 600;
+        color: #0d6efd !important;
+    }
+
+    .category-child {
+        font-weight: 600;
+        color: #333;
+    }
+
+    .table td, .table th {
+        vertical-align: middle;
+    }
+
+    .action-icon i {
+        font-size: 1.1rem;
+        transition: 0.2s;
+    }
+
+    .action-icon:hover i {
+        transform: scale(1.15);
+        opacity: 0.8;
+    }
+
+    .arrow-sub {
+        opacity: 0.6;
+        font-size: 0.9rem;
+    }
+
+    .badge-soft {
+        background-color: #eef1ff;
+        color: #4a5fe2;
+        border: 1px solid #d9ddff;
+    }
+
+    .badge-soft-secondary {
+        background-color: #f2f2f2;
+        color: #666;
+        border: 1px solid #e2e2e2;
+    }
+
+    .badge-count {
+        background: #f6f7fb;
+        border: 1px solid #e4e6ee;
+        font-weight: 500;
+    }
+</style>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h4 class="fw-bold text-dark mb-1">Categorias</h4>
+        <p class="text-muted small mb-0">Gerencie a hierarquia de produtos do sistema</p>
+    </div>
+    <a href="{% url 'categorias:create' %}" class="btn btn-primary shadow-sm">
+        <i class="fas fa-plus me-2"></i> Nova Categoria
+    </a>
+</div>
+
+<div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-custom align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th class="ps-4">Nome</th>
+                        <th>Tipo</th>
+                        <th>Produtos</th>
+                        <th class="text-end pe-4">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for category in categorias %}
+                    <tr>
+                        <td class="ps-4">
+                            {% if category.parent %}
+                                <span class="arrow-sub me-2 ms-2">↳</span>
+                                <span class="category-child">{{ category.name }}</span>
+                                <br>
+                                <small class="text-muted ms-4 ps-1">
+                                    <i class="fas fa-level-up-alt fa-rotate-90 me-1 text-muted small"></i>
+                                    Pai: {{ category.parent.name }}
+                                </small>
+                            {% else %}
+                                <span class="category-main">{{ category.name }}</span>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {% if category.parent %}
+                                <span class="badge badge-soft">Subcategoria</span>
+                            {% else %}
+                                <span class="badge badge-soft-secondary">Principal</span>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            <span class="badge badge-count">
+                                {{ category.produtos.count }} itens
+                            </span>
+                        </td>
+
+                        <td class="text-end pe-4">
+                            <a href="{% url 'categorias:detail' pk=category.id %}" class="action-icon text-decoration-none me-2" title="Ver detalhes">
+                                <i class="fas fa-eye text-muted"></i>
+                            </a>
+                            <a href="{% url 'categorias:edit' pk=category.id %}" class="action-icon text-decoration-none me-2" title="Editar">
+                                <i class="fas fa-edit text-primary"></i>
+                            </a>
+                            <a href="{% url 'categorias:delete' pk=category.id %}" class="action-icon text-decoration-none" title="Excluir">
+                                <i class="fas fa-trash text-danger"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center py-5 text-muted">
+                            <i class="fas fa-folder-open fa-2x mb-2 opacity-25"></i><br>
+                            Nenhuma categoria cadastrada.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
