@@ -1,4 +1,4 @@
-````markdown
+
 # GerencieCoisas - Sistema de Gerenciamento Web
 
 Este repositório contém o Trabalho Final da disciplina de Programação para Web I do curso de Análise e Desenvolvimento de Sistemas (4º Período).
@@ -37,7 +37,7 @@ O sistema possui controle de acesso (login necessário) e conta com 5 módulos p
 
 Confira o vídeo demonstrativo com o funcionamento do sistema, fluxo de telas e operações CRUD:
 
-[CLIQUE AQUI PARA ASSISTIR AO VÍDEO NO YOUTUBE](COLOQUE_O_LINK_DO_YOUTUBE_AQUI)
+[CLIQUE AQUI PARA ASSISTIR AO VÍDEO NO YOUTUBE](https://youtu.be/q7bJAl0KEVk)
 
 ---
 
@@ -97,7 +97,7 @@ O projeto estará acessível em: `http://127.0.0.1:8000/`
 ## 👥 Integrantes do Grupo
 
   * **Caio Alves Nascimento**
-  * **Lazaro Pedro Martins**
+  * **Lazaro Pedro Martins Santos**
 
 -----
 
