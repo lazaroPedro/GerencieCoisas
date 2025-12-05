@@ -1,116 +1,156 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container mt-4">
-    <div class="row justify-content-center">
-        <div class="col-md-7">
-            <div class="card shadow">
-                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                    <h4 class="mb-0">
-                        <i class="fas fa-user-edit me-2"></i> Editar Gerente
-                    </h4>
-                    <a href="{% url 'listar_gerentes' %}" class="btn btn-outline-light btn-sm">
-                        <i class="fas fa-arrow-left me-1"></i> Voltar
-                    </a>
-                </div>
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h4 class="fw-bold mb-1">Editar Gerente</h4>
+        <h6 class="text-muted mb-0">Atualize as informações e permissões de {{ form.instance.username }}</h6>
+    </div>
+    <a href="{% url 'listar_gerentes' %}" class="btn btn-outline-secondary btn-sm">
+        <i class="fas fa-arrow-left me-1"></i> Voltar
+    </a>
+</div>
 
-                <div class="card-body">
-                    <form method="post">
-                        {% csrf_token %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="card border-0 shadow-sm rounded-3">
+            <div class="card-body p-5">
+                
+                <form method="post">
+                    {% csrf_token %}
 
-                        <h5 class="mb-3 border-bottom pb-2">Dados do usuário</h5>
+                    <div class="mb-5">
+                        <h5 class="fw-bold text-dark mb-4 pb-2 border-bottom">
+                            <i class="fas fa-user-edit me-2 text-primary"></i>Dados Pessoais
+                        </h5>
+                        
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold text-muted small text-uppercase">Usuário</label>
+                                {{ form.username }}
+                                {% if form.username.errors %}
+                                    <div class="text-danger small mt-1">{{ form.username.errors.0 }}</div>
+                                {% endif %}
+                            </div>
 
-                        <div class="mb-3">
-                            <label for="{{ form.username.id_for_label }}" class="form-label fw-bold">
-                                {{ form.username.label }}
-                            </label>
-                            {{ form.username }}
-                            {% if form.username.errors %}
-                                <div class="text-danger small mt-1">
-                                    {{ form.username.errors.0 }}
-                                </div>
-                            {% endif %}
-                        </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold text-muted small text-uppercase">E-mail</label>
+                                {{ form.email }}
+                                {% if form.email.errors %}
+                                    <div class="text-danger small mt-1">{{ form.email.errors.0 }}</div>
+                                {% endif %}
+                            </div>
 
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="{{ form.first_name.id_for_label }}" class="form-label fw-bold">
-                                    {{ form.first_name.label }}
-                                </label>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold text-muted small text-uppercase">Nome</label>
                                 {{ form.first_name }}
-                                {% if form.first_name.errors %}
-                                    <div class="text-danger small mt-1">
-                                        {{ form.first_name.errors.0 }}
-                                    </div>
-                                {% endif %}
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="{{ form.last_name.id_for_label }}" class="form-label fw-bold">
-                                    {{ form.last_name.label }}
-                                </label>
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold text-muted small text-uppercase">Sobrenome</label>
                                 {{ form.last_name }}
-                                {% if form.last_name.errors %}
-                                    <div class="text-danger small mt-1">
-                                        {{ form.last_name.errors.0 }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <h5 class="fw-bold text-dark mb-3 pb-2 border-bottom">
+                            <i class="fas fa-shield-alt me-2 text-primary"></i>Permissões de Acesso
+                        </h5>
+                        <p class="text-muted small mb-4">Clique nos cards para ativar/desativar permissões.</p>
+
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="card h-100 permission-card p-3 d-block position-relative" for="{{ form.manage_produtos.id_for_label }}">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div class="text-center w-100 mt-2">
+                                            <i class="fas fa-box fa-2x mb-3 text-secondary icon-state"></i>
+                                            <h6 class="fw-bold mb-1">Produtos</h6>
+                                        </div>
+                                        <div class="position-absolute top-0 end-0 p-3">
+                                            <div class="form-check form-switch">
+                                                {{ form.manage_produtos }}
+                                            </div>
+                                        </div>
                                     </div>
-                                {% endif %}
+                                    <div class="text-center mt-1">
+                                        <small class="text-muted">Gestão completa</small>
+                                    </div>
+                                </label>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="card h-100 permission-card p-3 d-block position-relative" for="{{ form.manage_categorias.id_for_label }}">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div class="text-center w-100 mt-2">
+                                            <i class="fas fa-tags fa-2x mb-3 text-secondary icon-state"></i>
+                                            <h6 class="fw-bold mb-1">Categorias</h6>
+                                        </div>
+                                        <div class="position-absolute top-0 end-0 p-3">
+                                            <div class="form-check form-switch">
+                                                {{ form.manage_categorias }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="text-center mt-1">
+                                        <small class="text-muted">Hierarquia</small>
+                                    </div>
+                                </label>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="card h-100 permission-card p-3 d-block position-relative" for="{{ form.manage_fornecedores.id_for_label }}">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div class="text-center w-100 mt-2">
+                                            <i class="fas fa-truck fa-2x mb-3 text-secondary icon-state"></i>
+                                            <h6 class="fw-bold mb-1">Fornecedores</h6>
+                                        </div>
+                                        <div class="position-absolute top-0 end-0 p-3">
+                                            <div class="form-check form-switch">
+                                                {{ form.manage_fornecedores }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="text-center mt-1">
+                                        <small class="text-muted">Parceiros</small>
+                                    </div>
+                                </label>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="mb-3">
-                            <label for="{{ form.email.id_for_label }}" class="form-label fw-bold">
-                                {{ form.email.label }}
-                            </label>
-                            {{ form.email }}
-                            {% if form.email.errors %}
-                                <div class="text-danger small mt-1">
-                                    {{ form.email.errors.0 }}
-                                </div>
-                            {% endif %}
-                        </div>
+                    <div class="d-flex justify-content-end gap-3 mt-5 pt-3 border-top">
+                        <a href="{% url 'listar_gerentes' %}" class="btn btn-light border text-secondary px-4 fw-bold">Cancelar</a>
+                        <button type="submit" class="btn btn-primary px-5 fw-bold shadow-sm">
+                            <i class="fas fa-save me-2"></i> Salvar Alterações
+                        </button>
+                    </div>
 
-                        <h5 class="mt-4 mb-3 border-bottom pb-2">Permissões de acesso</h5>
-
-                        <div class="row">
-                            <div class="col-md-4 mb-2">
-                                <div class="form-check">
-                                    {{ form.manage_produtos }}
-                                    <label class="form-check-label fw-semibold" for="{{ form.manage_produtos.id_for_label }}">
-                                        {{ form.manage_produtos.label }}
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="col-md-4 mb-2">
-                                <div class="form-check">
-                                    {{ form.manage_categorias }}
-                                    <label class="form-check-label fw-semibold" for="{{ form.manage_categorias.id_for_label }}">
-                                        {{ form.manage_categorias.label }}
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="col-md-4 mb-2">
-                                <div class="form-check">
-                                    {{ form.manage_fornecedores }}
-                                    <label class="form-check-label fw-semibold" for="{{ form.manage_fornecedores.id_for_label }}">
-                                        {{ form.manage_fornecedores.label }}
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
-                            <a href="{% url 'listar_gerentes' %}" class="btn btn-secondary me-md-2">
-                                Cancelar
-                            </a>
-                            <button type="submit" class="btn btn-success">
-                                <i class="fas fa-save me-1"></i> Salvar alterações
-                            </button>
-                        </div>
-
-                    </form>
-                </div>
+                </form>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const checkboxes = document.querySelectorAll('.permission-card input[type="checkbox"]');
+        
+        function updateCardState(checkbox) {
+            const card = checkbox.closest('.permission-card');
+            if (checkbox.checked) {
+                card.classList.add('active-card');
+            } else {
+                card.classList.remove('active-card');
+            }
+        }
+
+        checkboxes.forEach(chk => {
+            updateCardState(chk);
+            chk.addEventListener('change', function() {
+                updateCardState(this);
+            });
+        });
+    });
+</script>
 {% endblock %}
