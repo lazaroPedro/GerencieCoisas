@@ -1,0 +1,145 @@
+:root {
+    --primary-color: #ff9f43;
+    --primary-hover: #f58e26;
+    --sidebar-width: 260px;
+    --header-height: 60px;
+    --body-bg: #f8f9fa;
+    --text-muted: #6c757d;
+}
+
+body {
+    background-color: var(--body-bg);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow-x: hidden;
+}
+
+.wrapper {
+    display: flex;
+    width: 100%;
+    align-items: stretch;
+}
+
+#sidebar {
+    min-width: var(--sidebar-width);
+    max-width: var(--sidebar-width);
+    background: #fff;
+    color: #333;
+    transition: all 0.3s;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    min-height: 100vh;
+}
+
+#sidebar .sidebar-header {
+    padding: 20px;
+    background: #fff;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+}
+
+#sidebar ul.components {
+    padding: 20px 0;
+}
+
+#sidebar ul li a {
+    padding: 12px 25px;
+    font-size: 15px;
+    display: block;
+    color: #555;
+    text-decoration: none;
+    transition: 0.3s;
+    border-left: 3px solid transparent;
+}
+
+#sidebar ul li a:hover {
+    color: var(--primary-color);
+    background: #fff8f3;
+}
+
+#sidebar ul li.active > a {
+    color: var(--primary-color);
+    background: #fff8f3;
+    border-left-color: var(--primary-color);
+    font-weight: 600;
+}
+
+#sidebar ul li a i {
+    margin-right: 10px;
+    width: 20px;
+    text-align: center;
+}
+
+#content {
+    width: 100%;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.navbar-custom {
+    background: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    height: var(--header-height);
+    padding: 0 20px;
+}
+
+.card-widget {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 24px 0 rgba(34, 41, 47, 0.05);
+    transition: all 0.3s ease;
+    background: #fff;
+    overflow: hidden;
+}
+
+.card-widget:hover {
+    transform: translateY(-5px);
+}
+
+.card-widget .icon-box {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+
+.bg-orange-light { background-color: rgba(255, 159, 67, 0.1); color: #ff9f43; }
+.bg-blue-light { background-color: rgba(40, 199, 111, 0.1); color: #28c76f; }
+.bg-cyan-light { background-color: rgba(0, 207, 221, 0.1); color: #00cfdd; }
+.bg-red-light { background-color: rgba(234, 84, 85, 0.1); color: #ea5455; }
+
+.table-custom thead th {
+    background-color: #f8f9fa;
+    border-bottom: none;
+    color: #555;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+}
+
+.table-custom tbody tr:hover {
+    background-color: #fafafa;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+    border-color: var(--primary-hover);
+}
+
+.action-icon {
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: #555;
+    transition: 0.3s;
+}
+.action-icon:hover {
+    background-color: #eee;
+}
