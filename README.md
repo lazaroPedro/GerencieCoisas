@@ -8,6 +8,7 @@ O projeto consiste em uma aplicação web completa desenvolvida com **Django**, 
 ## 🎯 Objetivo
 
 O objetivo deste projeto é demonstrar a aplicação prática de conceitos fundamentais do desenvolvimento web com Python e Django, incluindo:
+
 * Implementação de operações **CRUD** (Create, Read, Update, Delete) completas.
 * Controle de acesso, autenticação (Login/Logout) e permissões de usuários.
 * Uso estrito de **Function-Based Views (FBVs)** conforme requisito técnico.
@@ -71,7 +72,6 @@ source venv/bin/activate
 ```bash
 pip install django
 ```
-
 ### 4\. Aplique as migrações do banco de dados
 
 ```bash
@@ -103,6 +103,3 @@ O projeto estará acessível em: `http://127.0.0.1:8000/`
 
 **Professor:** Carlos Anderson  
 **Disciplina:** Programação para Web I
-
-```
-```
