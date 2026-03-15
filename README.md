@@ -103,3 +103,25 @@ O projeto estará acessível em: `http://127.0.0.1:8000/`
 
 **Professor:** Carlos Anderson  
 **Disciplina:** Programação para Web I
+
+
+## 🔌 Endpoints de API adicionados para Web II
+
+Além das telas HTML do projeto original, agora o sistema pode expor endpoints REST com Django REST Framework.
+
+Exemplos:
+
+- `GET /api/categorias/`
+- `POST /api/categorias/`
+- `GET /api/categorias/1/`
+- `GET /api/fornecedores/`
+- `GET /api/produtos/`
+
+As listagens da API usam paginação por página e aceitam parâmetros como:
+
+- `?page=2`
+- `?page_size=10`
+
+Para usar a API navegável do DRF com login de sessão:
+
+- `GET /api-auth/login/`

@@ -16,8 +16,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 
 from dashboard.views import index
+from categorias.api_views import CategoriaViewSet
+from fornecedores.api_views import FornecedorViewSet
+from produtos.api_views import ProdutoViewSet
+
+router = DefaultRouter()
+router.register(r"categorias", CategoriaViewSet, basename="api-categorias")
+router.register(r"fornecedores", FornecedorViewSet, basename="api-fornecedores")
+router.register(r"produtos", ProdutoViewSet, basename="api-produtos")
 
 urlpatterns = [
     path('', index, name='index'),
@@ -27,5 +36,6 @@ urlpatterns = [
     path('fornecedores/', include('fornecedores.urls')),
     path('conta/', include('usuarios.urls')),
     path("movimentacoes/", include("movimentacoes.urls")),
-    
+    path("api/", include(router.urls)),
+    path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
 ]

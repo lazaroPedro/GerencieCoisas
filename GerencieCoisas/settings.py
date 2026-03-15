@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'dashboard.apps.DashboardConfig',
     'usuarios.apps.UsuariosConfig',
     "movimentacoes.apps.MovimentacoesConfig",
+    "rest_framework"
 ]
 
 LOGIN_URL = 'login'
