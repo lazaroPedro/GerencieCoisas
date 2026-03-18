@@ -19,6 +19,10 @@ from django.urls import path, include
 
 from dashboard.views import index
 
+
+
+
+
 urlpatterns = [
     path('', index, name='index'),
     path('admin/', admin.site.urls),
@@ -27,5 +31,6 @@ urlpatterns = [
     path('fornecedores/', include('fornecedores.urls')),
     path('conta/', include('usuarios.urls')),
     path("movimentacoes/", include("movimentacoes.urls")),
-    
+    path('api/', include('GerencieCoisas.api_urls')),
 ]
+

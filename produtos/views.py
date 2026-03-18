@@ -5,6 +5,9 @@ from django.contrib.auth.decorators import login_required, permission_required
 from movimentacoes.utils import registrar_movimentacao
 from movimentacoes.models import Movimentacao
 
+
+
+
                         
 @login_required
 @permission_required("produtos.view_produto", raise_exception=True)
